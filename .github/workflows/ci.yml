@@ -66,4 +66,4 @@ jobs:
             exit 1
           fi
           echo "Using target spec: ${TARGET_SPECS[0]}"
-          cargo bootimage test --target "${TARGET_SPECS[0]}"
+          cargo test --target "${TARGET_SPECS[0]}"
