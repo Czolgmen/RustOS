@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+repo_root=$(git rev-parse --show-toplevel)
+cd "$repo_root"
+
+if [ "${SKIP_QEMU_TESTS:-}" = "1" ]; then
+  echo "Skipping QEMU tests (SKIP_QEMU_TESTS=1)"
+  exit 0
+fi
+
+if ! command -v cargo-bootimage >/dev/null 2>&1; then
+  echo "bootimage is not installed. Run: cargo install bootimage"
+  exit 1
+fi
+
+if ! command -v qemu-system-x86_64 >/dev/null 2>&1; then
+  echo "qemu-system-x86_64 is not installed. Install QEMU to run tests."
+  exit 1
+fi
+
+TARGET_SPECS=(.cargo/targets/*.json)
+if [ ! -e "${TARGET_SPECS[0]}" ]; then
+  echo "No target spec found in .cargo/targets"
+  exit 1
+fi
+if [ ${#TARGET_SPECS[@]} -ne 1 ]; then
+  echo "Expected exactly one target spec, found ${#TARGET_SPECS[@]}"
+  printf '%s\n' "${TARGET_SPECS[@]}"
+  exit 1
+fi
+
+echo "Using target spec: ${TARGET_SPECS[0]}"
+cargo test --target "${TARGET_SPECS[0]}"
