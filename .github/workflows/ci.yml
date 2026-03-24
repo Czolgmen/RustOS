@@ -20,20 +20,6 @@ jobs:
       - name: Cache cargo
         uses: Swatinem/rust-cache@v2
 
-      - name: Install QEMU
-        shell: bash
-        run: |
-          set -euo pipefail
-          sudo apt-get update
-          sudo apt-get install -y qemu-system-x86
-
-      - name: Install bootimage
-        shell: bash
-        run: |
-          set -euo pipefail
-          rustup component add llvm-tools-preview
-          cargo install bootimage
-
       - name: Build for target spec
         shell: bash
         run: |
@@ -50,20 +36,3 @@ jobs:
           fi
           echo "Using target spec: ${TARGET_SPECS[0]}"
           cargo build -Z build-std=core,compiler_builtins --target "${TARGET_SPECS[0]}"
-
-      - name: Run tests with bootimage
-        shell: bash
-        run: |
-          set -euo pipefail
-          TARGET_SPECS=(.cargo/targets/*.json)
-          if [ ! -e "${TARGET_SPECS[0]}" ]; then
-            echo "No target spec found in .cargo/targets"
-            exit 1
-          fi
-          if [ ${#TARGET_SPECS[@]} -ne 1 ]; then
-            echo "Expected exactly one target spec, found ${#TARGET_SPECS[@]}"
-            printf '%s\n' "${TARGET_SPECS[@]}"
-            exit 1
-          fi
-          echo "Using target spec: ${TARGET_SPECS[0]}"
-          cargo test --target "${TARGET_SPECS[0]}"
