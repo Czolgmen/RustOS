@@ -1,5 +1,5 @@
 [package]
-name = "os"
+name = "RustOS"
 version = "0.1.0"
 edition = "2024"
 
@@ -10,7 +10,7 @@ panic = "abort"
 panic = "abort"
 
 [[bin]]
-name = "os"
+name = "RustOS"
 path = "src/main.rs"
 test = false
 bench = false
