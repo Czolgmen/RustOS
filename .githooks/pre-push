@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+TARGET_SPECS=(.cargo/targets/*.json)
+if [ ! -e "${TARGET_SPECS[0]}" ]; then
+  echo "No target spec found in .cargo/targets"
+  exit 1
+fi
+if [ ${#TARGET_SPECS[@]} -ne 1 ]; then
+  echo "Expected exactly one target spec, found ${#TARGET_SPECS[@]}"
+  printf '%s\n' "${TARGET_SPECS[@]}"
+  exit 1
+fi
+
+echo "Using target spec: ${TARGET_SPECS[0]}"
+cargo bootimage test --target "${TARGET_SPECS[0]}"
