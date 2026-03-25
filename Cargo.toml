@@ -1,10 +1,10 @@
 [package]
-name = "RustOS"
+name = "rust_os"
 version = "0.1.0"
 edition = "2024"
 
 [[bin]]
-name = "RustOS"
+name = "rust_os"
 path = "src/main.rs"
 test = true
 bench = false
