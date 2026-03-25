@@ -42,6 +42,8 @@ pub fn test_panic_handler(info: &PanicInfo) -> ! {
     serial_println!("[FAILED]");
     serial_println!("Error: {}", info);
     exit_qemu(QemuExitCodes::ExitFailure);
+
+    #[allow(clippy::empty_loop)]
     loop {}
 }
 
@@ -65,5 +67,7 @@ pub fn exit_qemu(exit_code: QemuExitCodes) {
 #[unsafe(no_mangle)]
 pub extern "C" fn _start() -> ! {
     test_main();
+
+    #[allow(clippy::empty_loop)]
     loop {}
 }
